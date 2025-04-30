@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChatGPT Clone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Scrollbar styling for chat messages */
+    #chatMessages::-webkit-scrollbar {
+      width: 8px;
+    }
+    #chatMessages::-webkit-scrollbar-thumb {
+      background-color: #a0aec0;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 flex flex-col h-screen">
+  <header class="bg-white shadow p-4 flex items-center justify-center">
+    <h1 class="text-2xl font-semibold text-gray-800">ChatGPT Clone</h1>
+  </header>
+
+  <main class="flex-1 flex flex-col max-w-3xl mx-auto w-full p-4">
+    <div id="chatMessages" class="flex-1 overflow-y-auto mb-4 space-y-4 p-4 bg-white rounded-lg shadow-inner">
+      <!-- Chat messages will appear here -->
+    </div>
+
+    <form id="chatForm" class="flex space-x-2">
+      <textarea id="userInput" rows="1" placeholder="Type your message..." required
+        class="flex-1 resize-none rounded-md border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 p-2 text-gray-700 transition duration-150 ease-in-out"></textarea>
+      <button type="submit" aria-label="Send message"
+        class="bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 flex items-center justify-center transition duration-150 ease-in-out">
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </form>
+  </main>
+
+  <footer class="bg-white text-center text-gray-500 text-sm p-2">
+    &copy; 2024 ChatGPT Clone. All rights reserved.
+  </footer>
+
+  <script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const userInput = document.getElementById('userInput');
+
+    // Function to create a chat message element
+    function createMessageElement(message, sender) {
+      const messageEl = document.createElement('div');
+      messageEl.classList.add('max-w-xl', 'px-4', 'py-2', 'rounded-lg', 'shadow', 'whitespace-pre-wrap');
+      if (sender === 'user') {
+        messageEl.classList.add('bg-blue-600', 'text-white', 'self-end', 'rounded-br-none');
+      } else {
+        messageEl.classList.add('bg-gray-200', 'text-gray-800', 'self-start', 'rounded-bl-none');
+      }
+      messageEl.textContent = message;
+      return messageEl;
+    }
+
+    // Function to simulate assistant response with simple keyword-based answers
+    function getAssistantResponse(userMessage) {
+      const msg = userMessage.toLowerCase();
+
+      if (msg.includes('hello') || msg.includes('hi')) {
+        return "Hello! How can I assist you today?";
+      }
+      if (msg.includes('how are you')) {
+        return "I'm just a program, but I'm here to help you!";
+      }
+      if (msg.includes('your name')) {
+        return "I'm a ChatGPT Clone created to assist you.";
+      }
+      if (msg.includes('help')) {
+        return "Sure! Ask me anything or tell me what you need help with.";
+      }
+      if (msg.includes('weather')) {
+        return "I can't check real-time weather, but I hope it's nice where you are!";
+      }
+      if (msg.includes('time')) {
+        return "I don't have a clock, but you can check your device for the current time.";
+      }
+      if (msg.includes('thank')) {
+        return "You're welcome! Happy to help.";
+      }
+      if (msg.includes('bye') || msg.includes('goodbye')) {
+        return "Goodbye! Have a great day!";
+      }
+      // Default fallback response
+      return "That's interesting! Tell me more or ask another question.";
+    }
+
+    // Handle form submission
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userMessage = userInput.value.trim();
+      if (!userMessage) return;
+
+      // Append user message
+      const userMessageEl = createMessageElement(userMessage, 'user');
+      chatMessages.appendChild(userMessageEl);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      userInput.value = '';
+      userInput.focus();
+
+      // Simulate assistant typing delay
+      setTimeout(() => {
+        const assistantMessage = getAssistantResponse(userMessage);
+        const assistantMessageEl = createMessageElement(assistantMessage, 'assistant');
+        chatMessages.appendChild(assistantMessageEl);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 1000);
+    });
+
+    // Auto-expand textarea height
+    userInput.addEventListener('input', () => {
+      userInput.style.height = 'auto';
+      userInput.style.height = userInput.scrollHeight + 'px';
+    });
+  </script>
+</body>
+</html>
